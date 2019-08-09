@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.tradeservice.util.TestUtils.*;
+import static com.tradeservice.util.TestConstants.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;

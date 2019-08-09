@@ -3,7 +3,7 @@ package com.tradeservice.controller;
 import com.tradeservice.entity.Order;
 import com.tradeservice.service.impl.OrderServiceImpl;
 
-import static com.tradeservice.util.TestUtils.*;
+import static com.tradeservice.util.TestConstants.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -19,10 +19,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(OrderController.class)

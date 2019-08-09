@@ -3,7 +3,7 @@ package com.tradeservice.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tradeservice.service.impl.ProductServiceImpl;
 
-import static com.tradeservice.util.TestUtils.*;
+import static com.tradeservice.util.TestConstants.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

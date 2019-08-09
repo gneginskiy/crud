@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static com.tradeservice.util.TestUtils.PRODUCT_LIST;
+import static com.tradeservice.util.TestConstants.PRODUCT_LIST;
 import static java.util.stream.Collectors.toList;
 
 @RunWith(SpringRunner.class)

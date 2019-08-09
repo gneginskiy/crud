@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import static com.tradeservice.util.TestUtils.*;
+import static com.tradeservice.util.TestConstants.*;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public final class TestUtils {
+public final class TestConstants {
     public  static final Product       PRODUCT_1    = new Product(1L, "Product #12311", 51.0);
     public  static final Product       PRODUCT_2    = new Product(2L, "Product #12312", 52.0);
     public  static final Product       PRODUCT_3    = new Product(3L, "Product #12313", 53.0);
