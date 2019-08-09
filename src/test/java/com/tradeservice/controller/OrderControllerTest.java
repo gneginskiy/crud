@@ -1,7 +1,7 @@
 package com.tradeservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tradeservice.service.impl.ProductServiceImpl;
+import com.tradeservice.entity.Order;
+import com.tradeservice.service.impl.OrderServiceImpl;
 
 import static com.tradeservice.util.TestUtils.*;
 import static org.mockito.Mockito.*;
@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,63 +19,64 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(ProductController.class)
-public class ProductControllerTest {
+@WebMvcTest(OrderController.class)
+public class OrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductServiceImpl productService;
+    private OrderServiceImpl orderService;
 
     @Test
     public void testGetAll() throws Exception {
-        when(productService.getAll()).thenReturn(PRODUCT_LIST);
-        this.mockMvc.perform(get("/products").contentType(MediaType.APPLICATION_JSON))
+        List<Order> ordersList = List.of(POPULATED_ORDER);
+        when(orderService.getAll()).thenReturn(ordersList);
+        this.mockMvc.perform(get("/orders").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(PRODUCT_LIST)));
+                .andExpect(content().json(POPULATED_ORDERS_ARRAY_JSON));
+        verify(orderService, times(1)).getAll();
     }
 
     @Test
     public void testGetById() throws Exception {
-        when(productService.getById(PRODUCT_1.getProductId())).thenReturn(Optional.of(PRODUCT_1));
-        this.mockMvc.perform(get("/products/1").contentType(MediaType.APPLICATION_JSON))
+        Order order = POPULATED_ORDER;
+        when(orderService.getById(order.getOrderId())).thenReturn(Optional.of(order));
+        this.mockMvc.perform(get("/orders/"+order.getOrderId()).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().json(asJsonString(PRODUCT_1)));
+                .andExpect(content().json(POPULATED_ORDER_JSON));
+        verify(orderService, times(1)).getById(order.getOrderId());
     }
 
     @Test
     public void testDelete() throws Exception {
-        this.mockMvc.perform(delete("/products/1").contentType(MediaType.APPLICATION_JSON))
+        when(orderService.getById(POPULATED_ORDER.getOrderId())).thenReturn(Optional.of(POPULATED_ORDER));
+        this.mockMvc.perform(delete("/orders/"+POPULATED_ORDER.getOrderId()).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isAccepted());
-        verify(productService, times(1)).delete(PRODUCT_1.getProductId());
+        verify(orderService, times(1)).delete(POPULATED_ORDER.getOrderId());
     }
 
     @Test
     public void testAdd() throws Exception {
-        this.mockMvc.perform(post("/products")
-                .content(asJsonString(PRODUCT_1))
+        this.mockMvc.perform(post("/orders")
+                .content(POPULATED_ORDER_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isCreated());
-        verify(productService, times(1)).add(PRODUCT_1);
+        verify(orderService, times(1)).add(POPULATED_ORDER);
     }
 
     @Test
     public void testUpdate() throws Exception {
-        this.mockMvc.perform(put("/products/" + PRODUCT_1.getProductId())
-                .content(asJsonString(PRODUCT_1))
+        this.mockMvc.perform(put("/orders/" + POPULATED_ORDER.getOrderId())
+                .content(POPULATED_ORDER_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print()).andExpect(status().isAccepted());
-        verify(productService, times(1)).update(PRODUCT_1, PRODUCT_1.getProductId());
+        verify(orderService, times(1)).update(POPULATED_ORDER, POPULATED_ORDER.getOrderId());
     }
-
-
-    @SneakyThrows
-    private static String asJsonString(final Object obj) {
-        return new ObjectMapper().writeValueAsString(obj);
-    }
-
 }

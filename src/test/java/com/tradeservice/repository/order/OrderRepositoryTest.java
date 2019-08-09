@@ -24,7 +24,6 @@ import static com.tradeservice.util.TestUtils.*;
 @AutoConfigureMockMvc
 public class OrderRepositoryTest {
 
-    public static final String CLIENT_NAME = "Alphabet inc.";
     @Autowired private OrderRepository   orderRepository;
     @Autowired private ProductRepository productRepository;
 
