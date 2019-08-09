@@ -1,9 +1,11 @@
 package com.tradeservice.controllers;
 
-import com.tradeservice.ecxeptions.OrderEntryNotFoundException;
+import com.tradeservice.ecxeptions.OrderNotFoundException;
 import com.tradeservice.entities.Order;
 import com.tradeservice.services.OrderService;
-import java.util.List;
+
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/orders")
-public class OrderAPI {
+public class OrderController {
 
   private OrderService orderService;
 
   @Autowired
-  public OrderAPI(OrderService orderService) {
+  public OrderController(OrderService orderService) {
     this.orderService = orderService;
   }
 
@@ -32,25 +34,22 @@ public class OrderAPI {
    * 1) - добавление нового заказа
    * @return HttpStatus.CREATED if ok, and added Order, где все данные по заказу.
    * POST http://localhost:8080/orders/ JSON:
-   * @see com.tradeservice.utils addFullOrder.json
    */
   @PostMapping
-  public ResponseEntity<Order> addFullOrder(@RequestBody Order newOrderRequest) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(orderService.add(newOrderRequest));
+  public ResponseEntity<Order> createOrder(@RequestBody Order createOrderRequest) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(orderService.add(createOrderRequest));
   }
 
   /**
    * 2)	- изменение существующего заказа
-   * @param newOrderRequest - заказ
+   * @param updateOrderRequest - заказ
    * @param id id изменяемого
    * @return HttpStatus.ACCEPTED, Order, где все данные по измененному заказу.
    * PUT http://localhost:8080/orders/{id} JSON:
-   * @see com.tradeservice.utils editFullOrder.json
    */
   @PutMapping("/{id}")
-  public ResponseEntity<Order> editFullOrder(@RequestBody Order newOrderRequest,
-      @PathVariable Long id) {
-    return ResponseEntity.accepted().body(orderService.edit(newOrderRequest, id));
+  public ResponseEntity<Order> updateOrder(@RequestBody Order updateOrderRequest, @PathVariable Long id) {
+    return ResponseEntity.accepted().body(orderService.update(updateOrderRequest, id));
   }
 
   /**
@@ -60,7 +59,7 @@ public class OrderAPI {
    * DELETE http://localhost:8080/orders/{id}
    */
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteFullOrder(@PathVariable Long id) {
+  public ResponseEntity deleteOrder(@PathVariable Long id) {
     orderService.delete(id);
     return ResponseEntity.accepted().build();
   }
@@ -71,7 +70,7 @@ public class OrderAPI {
    * GET http://localhost:8080/orders/
    */
   @GetMapping
-  public ResponseEntity<List<Order>> getAllFullOrders() {
+  public ResponseEntity<Collection<Order>> getAllOrders() {
     return ResponseEntity.ok(orderService.getAll());
   }
 
@@ -82,8 +81,8 @@ public class OrderAPI {
    * GET http://localhost:8080/orders/{id}
    */
   @GetMapping("/{id}")
-  public ResponseEntity<Order> getOrderLineById(@PathVariable Long id) {
+  public ResponseEntity<Order> getOrder(@PathVariable Long id) {
     return ResponseEntity
-        .ok(orderService.getById(id).orElseThrow(() -> new OrderEntryNotFoundException(id)));
+        .ok(orderService.getById(id).orElseThrow(() -> new OrderNotFoundException(id)));
   }
 }

@@ -1,8 +1,8 @@
 package com.tradeservice.entities;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,36 +15,56 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
+import static javax.persistence.CascadeType.*;
 
 @Data
 @Entity
-@Table(name = "orders")
+@DynamicUpdate
+@Table(name = "order_")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order {
 
-  public Order(String client, Date date, String address) {
-    this.client = client;
-    this.date = date;
-    this.address = address;
+  public Order(String clientName, LocalDateTime date, String address) {
+    this.clientName = clientName;
+    this.date       = date;
+    this.address    = address;
+    this.orderItems = new HashSet<>();
   }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long orderId;
 
-  @Column(name = "Client", nullable = false)
-  private String client;
+  @Column(name = "clientName", nullable = false)
+  private String clientName;
 
-  @Column(name = "Date")
-  private Date date;
+  @Column(name = "date")
+  private LocalDateTime date;
 
-  @Column(name = "Address", nullable = false)
+  @Column(name = "address", nullable = false)
   private String address;
 
-  @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "orderItem", cascade =
-      CascadeType.ALL)
-  private Set<OrderLine> orderLines = new HashSet<>();
+  @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "parentOrder", cascade = {MERGE,PERSIST,REFRESH})
+  private Collection<OrderItem> orderItems = new HashSet<>();
+
+  public void setOrderItems(Collection<OrderItem> orderItems) {
+    orderItems.forEach(this::addOrderItem);
+  }
+
+  private void addOrderItem(OrderItem orderItem) {
+    orderItem.setParentOrder(this);
+    this.orderItems.add(orderItem);
+  }
+
+  public Order linkOrderItems(){
+    orderItems.forEach(orderItem->orderItem.setParentOrder(this));
+    return this;
+  }
 }
 
 

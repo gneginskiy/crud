@@ -1,9 +1,11 @@
 package com.tradeservice.controllers;
 
-import com.tradeservice.ecxeptions.GoodsNotFoundException;
-import com.tradeservice.entities.Goods;
-import com.tradeservice.services.GoodsService;
-import java.util.List;
+import com.tradeservice.ecxeptions.ProductNotFoundException;
+import com.tradeservice.entities.Product;
+import com.tradeservice.services.ProductService;
+
+import java.util.Collection;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,62 +21,59 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/goods")
-public class GoodsAPI {
+@RequestMapping(value = "/products")
+public class ProductController {
 
-  private GoodsService goodsService;
+  private ProductService productService;
 
   @Autowired
-  public GoodsAPI(GoodsService goodsService) {
-    this.goodsService = goodsService;
+  public ProductController(ProductService productService) {
+    this.productService = productService;
   }
-
 
   /**
    * 6) - добавление нового товара
-   * @param goods добавляемый товар
-   * @return HttpStatus.CREATED if ok, and added Goods
-   * POST http://localhost:8080/goods/ JSON:
-   * @see com.tradeservice.utils addGoods.json
+   * @param product добавляемый товар
+   * @return HttpStatus.CREATED if ok, and added Product
+   * POST http://localhost:8080/product/ JSON:
    */
   @PostMapping
-  public ResponseEntity<Goods> addGoods(@RequestBody Goods goods) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(goodsService.add(goods));
+  public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(productService.add(product));
   }
 
   /**
    * 7) - изменение существующего товара, поиск в базе по id
-   * @param newGoods товар
+   * @param newProduct товар
    * @param id id изменяемого
    * @return HttpStatus.ACCEPTED, сам товар, измененный
-   * PUT http://localhost:8080/goods/{id} JSON:
-   * @see com.tradeservice.utils editGoods.json
+   * PUT http://localhost:8080/product/{id} JSON:
    */
   @PutMapping("/{id}")
-  public ResponseEntity<Goods> editGoods(@RequestBody Goods newGoods, @PathVariable Long id) {
-    return ResponseEntity.accepted().body(goodsService.edit(newGoods, id));
+  public ResponseEntity<Product> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
+    return ResponseEntity.accepted().body(productService.update(newProduct, id));
   }
 
   /**
    * 8)	- удаление товара
    * @param id - id товара
    * @return HttpStatus.ACCEPTED
-   * DELETE http://localhost:8080/goods/{id}
+   * DELETE http://localhost:8080/product/{id}
    */
   @DeleteMapping("/{id}")
-  public ResponseEntity deleteGoods(@PathVariable Long id) {
-    goodsService.delete(id);
+  public ResponseEntity deleteProduct(@PathVariable Long id) {
+    productService.delete(id);
     return ResponseEntity.accepted().build();
   }
 
   /**
    * 9) - получение всех товаров
    * @return HttpStatus.OK, List все товары
-   * GET http://localhost:8080/goods
+   * GET http://localhost:8080/product
    */
   @GetMapping
-  public ResponseEntity<List<Goods>> getAllGoods() {
-    return ResponseEntity.ok(goodsService.getAll());
+  public ResponseEntity<Collection<Product>> getAllProduct() {
+    return ResponseEntity.ok(productService.getAll());
   }
 
   /**
@@ -84,8 +83,7 @@ public class GoodsAPI {
    * GET http://localhost:8080/catalog/{id}
    */
   @GetMapping("/{id}")
-  public ResponseEntity<Goods> getGoodsById(@PathVariable Long id) {
-    return ResponseEntity
-        .ok(goodsService.getById(id).orElseThrow(() -> new GoodsNotFoundException(id)));
+  public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    return ResponseEntity.ok(productService.getById(id).orElseThrow(() -> new ProductNotFoundException(id)));
   }
 }

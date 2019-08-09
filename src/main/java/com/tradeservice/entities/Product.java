@@ -6,29 +6,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "goods")
+@Table(name = "product")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Goods {
+public class Product {
 
-  public Goods(String name, Double price) {
+  public Product(String name, Double price) {
     this.name = name;
     this.price = price;
   }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long goodsId;
+  private Long productId;
 
-  @Column(name = "Name", nullable = false, unique = true)
+  @NotNull
+  @Column(name = "name", nullable = false, unique = true)
   private String name;
 
-  @Column(name = "Price", nullable = false)
+  @NotNull
+  @Column(name = "price", nullable = false)
   private Double price;
 }

@@ -1,77 +1,47 @@
 package com.tradeservice.services.impl;
 
-import com.tradeservice.ecxeptions.GoodsNotFoundException;
-import com.tradeservice.ecxeptions.OrderEntryNotFoundException;
-import com.tradeservice.entities.Goods;
+import com.tradeservice.ecxeptions.OrderNotFoundException;
 import com.tradeservice.entities.Order;
-import com.tradeservice.repositories.OrderLineRepository;
-import com.tradeservice.repositories.OrderRepository;
-import com.tradeservice.services.GoodsService;
+import com.tradeservice.repository.order.OrderRepository;
 import com.tradeservice.services.OrderService;
-import java.util.List;
+
+import java.util.Collection;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
-  private final OrderRepository orderRepository;
-  private final OrderLineRepository orderLineRepository;
-  private final GoodsService goodsService;
+  private final OrderRepository     orderRepository;
 
   @Autowired
-  public OrderServiceImpl(OrderRepository orderRepository,
-      OrderLineRepository orderLineRepository, GoodsService goodsService) {
-    this.orderRepository = orderRepository;
-    this.orderLineRepository = orderLineRepository;
-    this.goodsService = goodsService;
+  public OrderServiceImpl(OrderRepository orderRepository) {
+    this.orderRepository     = orderRepository;
   }
 
-
   @Override
+  @Transactional
   public Order add(Order newOrderRequest) {
-    Order savedOrder = orderRepository.save(
-        new Order(newOrderRequest.getClient(), newOrderRequest.getDate(),
-            newOrderRequest.getAddress()));
-
-    addOrderLines(newOrderRequest, savedOrder);
-    return orderRepository.saveAndFlush(savedOrder);
+    newOrderRequest.setOrderId(null);
+    return orderRepository.saveAndRefresh(newOrderRequest.linkOrderItems());
   }
 
   @Override
-  public Order edit(Order newOrderRequest, Long id) {
-    Order savedOrder =
-        orderRepository.findById(id).orElseThrow(() -> new OrderEntryNotFoundException(id));
-    savedOrder.setClient(newOrderRequest.getClient());
-    savedOrder.setAddress(newOrderRequest.getAddress());
-    savedOrder.setDate(newOrderRequest.getDate());
-    savedOrder.getOrderLines()
-        .forEach(orderLine -> orderLineRepository.deleteById(orderLine.getId()));
-    addOrderLines(newOrderRequest, savedOrder);
-    return orderRepository.saveAndFlush(savedOrder);
-  }
-
-  private void addOrderLines(Order newOrderRequest, Order savedOrder) {
-    newOrderRequest.getOrderLines().forEach(orderLine -> {
-      Long goodsId = orderLine.getGoods().getGoodsId();
-      Goods existGoods = goodsService.getById(goodsId)
-          .orElseThrow(() -> new GoodsNotFoundException(goodsId));
-      orderLine.setGoods(existGoods);
-      orderLine.setOrderItem(savedOrder);
-      orderLineRepository.save(orderLine);
-    });
-    savedOrder.setOrderLines(newOrderRequest.getOrderLines());
+  public Order update(Order newOrderRequest, Long id) {
+    orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+    newOrderRequest.setOrderId(id);
+    return orderRepository.saveAndFlush(newOrderRequest.linkOrderItems());
   }
 
   @Override
   public void delete(Long id) {
-    orderRepository.findById(id).orElseThrow(() -> new OrderEntryNotFoundException(id));
-    orderRepository.deleteById(id);
+    orderRepository.delete(orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id)));
   }
 
   @Override
-  public List<Order> getAll() {
+  public Collection<Order> getAll() {
     return orderRepository.findAll();
   }
 
@@ -79,4 +49,5 @@ public class OrderServiceImpl implements OrderService {
   public Optional<Order> getById(Long id) {
     return orderRepository.findById(id);
   }
+
 }

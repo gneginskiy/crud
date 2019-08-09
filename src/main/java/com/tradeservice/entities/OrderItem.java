@@ -18,13 +18,13 @@ import lombok.ToString;
 
 @Data
 @Entity
-@Table(name = "order_lines")
+@Table(name = "order_item")
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderLine {
+public class OrderItem {
 
-  public OrderLine(Goods goods, int count) {
-    this.goods = goods;
+  public OrderItem(Product product, int count) {
+    this.product = product;
     this.count = count;
   }
 
@@ -34,16 +34,16 @@ public class OrderLine {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "orderId")
+  @JoinColumn(name = "parent_order")
   @Getter(AccessLevel.NONE)
   @ToString.Exclude
   @EqualsAndHashCode.Exclude
-  private Order orderItem;
+  private Order parentOrder;
 
   @ManyToOne
-  @JoinColumn(name = "goodsId")
-  private Goods goods;
+  @JoinColumn(name = "productId")
+  private Product product;
 
-  @Column(name = "Count")
+  @Column(name = "count")
   private int count;
 }
