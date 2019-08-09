@@ -10,11 +10,13 @@ import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name = "product")
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product {

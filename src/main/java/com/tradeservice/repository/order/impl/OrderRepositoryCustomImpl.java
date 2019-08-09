@@ -10,7 +10,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     private final OrderRepositoryBasic orderRepositoryBasic;
     private final EntityManager        entityManager;
 
-    // constructor-based injection
     public OrderRepositoryCustomImpl(OrderRepositoryBasic orderRepositoryBasic, EntityManager entityManager1) {
         this.orderRepositoryBasic = orderRepositoryBasic;
         this.entityManager = entityManager1;

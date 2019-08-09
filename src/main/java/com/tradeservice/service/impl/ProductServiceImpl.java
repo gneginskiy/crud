@@ -2,7 +2,7 @@ package com.tradeservice.service.impl;
 
 import com.tradeservice.ecxeption.ProductNotFoundException;
 import com.tradeservice.entity.Product;
-import com.tradeservice.repository.ProductRepository;
+import com.tradeservice.repository.product.ProductRepository;
 import com.tradeservice.service.ProductService;
 
 import java.util.Collection;
