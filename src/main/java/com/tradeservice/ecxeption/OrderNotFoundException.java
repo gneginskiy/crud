@@ -1,4 +1,4 @@
-package com.tradeservice.ecxeptions;
+package com.tradeservice.ecxeption;
 
 public class OrderNotFoundException extends RuntimeException {
 

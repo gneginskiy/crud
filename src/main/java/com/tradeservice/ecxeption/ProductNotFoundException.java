@@ -1,4 +1,4 @@
-package com.tradeservice.ecxeptions;
+package com.tradeservice.ecxeption;
 
 public class ProductNotFoundException extends RuntimeException {
 

@@ -1,8 +1,8 @@
-package com.tradeservice.controllers;
+package com.tradeservice.controller;
 
-import com.tradeservice.ecxeptions.ProductNotFoundException;
-import com.tradeservice.entities.Product;
-import com.tradeservice.services.ProductService;
+import com.tradeservice.ecxeption.ProductNotFoundException;
+import com.tradeservice.entity.Product;
+import com.tradeservice.service.ProductService;
 
 import java.util.Collection;
 

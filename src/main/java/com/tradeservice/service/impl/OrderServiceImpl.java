@@ -1,9 +1,9 @@
-package com.tradeservice.services.impl;
+package com.tradeservice.service.impl;
 
-import com.tradeservice.ecxeptions.OrderNotFoundException;
-import com.tradeservice.entities.Order;
+import com.tradeservice.ecxeption.OrderNotFoundException;
+import com.tradeservice.entity.Order;
 import com.tradeservice.repository.order.OrderRepository;
-import com.tradeservice.services.OrderService;
+import com.tradeservice.service.OrderService;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -25,14 +25,14 @@ public class OrderServiceImpl implements OrderService {
   @Transactional
   public Order add(Order newOrderRequest) {
     newOrderRequest.setOrderId(null);
-    return orderRepository.saveAndRefresh(newOrderRequest.linkOrderItems());
+    return orderRepository.saveAndRefresh(newOrderRequest);
   }
 
   @Override
   public Order update(Order newOrderRequest, Long id) {
     orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     newOrderRequest.setOrderId(id);
-    return orderRepository.saveAndFlush(newOrderRequest.linkOrderItems());
+    return orderRepository.saveAndFlush(newOrderRequest);
   }
 
   @Override

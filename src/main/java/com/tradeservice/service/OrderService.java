@@ -1,6 +1,6 @@
-package com.tradeservice.services;
+package com.tradeservice.service;
 
-import com.tradeservice.entities.Order;
+import com.tradeservice.entity.Order;
 
 import java.util.Collection;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.tradeservice.entities;
+package com.tradeservice.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +27,6 @@ public class OrderItem {
     this.product = product;
     this.count = count;
   }
-
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

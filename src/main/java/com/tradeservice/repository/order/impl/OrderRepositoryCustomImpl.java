@@ -1,6 +1,6 @@
 package com.tradeservice.repository.order.impl;
 
-import com.tradeservice.entities.Order;
+import com.tradeservice.entity.Order;
 import com.tradeservice.repository.order.OrderRepositoryBasic;
 import com.tradeservice.repository.order.OrderRepositoryCustom;
 

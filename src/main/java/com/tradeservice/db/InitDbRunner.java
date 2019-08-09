@@ -1,10 +1,10 @@
 package com.tradeservice.db;
 
-import com.tradeservice.entities.OrderItem;
-import com.tradeservice.entities.Product;
-import com.tradeservice.entities.Order;
-import com.tradeservice.services.ProductService;
-import com.tradeservice.services.OrderService;
+import com.tradeservice.entity.OrderItem;
+import com.tradeservice.entity.Product;
+import com.tradeservice.entity.Order;
+import com.tradeservice.service.ProductService;
+import com.tradeservice.service.OrderService;
 
 import java.time.LocalDateTime;
 import java.util.Set;

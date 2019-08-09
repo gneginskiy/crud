@@ -1,7 +1,7 @@
 package com.tradeservice.aop;
 
-import com.tradeservice.ecxeptions.ProductNotFoundException;
-import com.tradeservice.ecxeptions.OrderNotFoundException;
+import com.tradeservice.ecxeption.ProductNotFoundException;
+import com.tradeservice.ecxeption.OrderNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

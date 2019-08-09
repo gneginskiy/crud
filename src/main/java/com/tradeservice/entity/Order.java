@@ -1,9 +1,8 @@
-package com.tradeservice.entities;
+package com.tradeservice.entity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,18 +11,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 import static javax.persistence.CascadeType.*;
 
 @Data
 @Entity
-@DynamicUpdate
 @Table(name = "order_")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -61,7 +58,8 @@ public class Order {
     this.orderItems.add(orderItem);
   }
 
-  public Order linkOrderItems(){
+  @JsonDeserialize
+  private Order linkOrderItems(){
     orderItems.forEach(orderItem->orderItem.setParentOrder(this));
     return this;
   }
