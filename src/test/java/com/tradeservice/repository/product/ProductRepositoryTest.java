@@ -1,6 +1,7 @@
 package com.tradeservice.repository.product;
 
 import com.tradeservice.entity.Product;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-import java.util.stream.LongStream;
 
+import static com.tradeservice.util.TestConstants.getProductsList;
 import static java.util.stream.Collectors.toList;
 
 @RunWith(SpringRunner.class)
@@ -23,8 +24,8 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @BeforeEach
-    public void before() {
+    @After
+    public void tearDown() {
         productRepository.deleteAll();
     }
 
@@ -36,9 +37,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void testFindAllByIds() throws Exception {
-        List<Product> productsToSave = LongStream.iterate(1, i -> ++i).limit(50)
-                .mapToObj(i -> new Product(i + "Товар #12315" + i, 59.0 + i))
-                .collect(toList());
+        List<Product> productsToSave = getProductsList();
         productRepository.saveAll(productsToSave);
 
         List<Product> productsFound = productRepository.findAllById(productsToSave.stream().map(Product::getProductId).collect(toList()));

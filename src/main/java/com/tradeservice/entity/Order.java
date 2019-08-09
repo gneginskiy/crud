@@ -26,11 +26,17 @@ import static javax.persistence.CascadeType.*;
 @AllArgsConstructor
 public class Order {
 
+  public Order(String clientName, LocalDateTime date, String address, Collection<OrderItem> orderItems) {
+    this.clientName = clientName;
+    this.date       = date;
+    this.address    = address;
+    setOrderItems(orderItems);
+  }
+
   public Order(String clientName, LocalDateTime date, String address) {
     this.clientName = clientName;
     this.date       = date;
     this.address    = address;
-    this.orderItems = new HashSet<>();
   }
 
   @Id

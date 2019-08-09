@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Wither;
 
 @Data
 @Entity
@@ -37,4 +38,8 @@ public class Product {
   @NotNull
   @Column(name = "price", nullable = false)
   private Double price;
+
+  public Product copy(){
+    return new Product(name,price);
+  }
 }

@@ -1,88 +1,70 @@
 package com.tradeservice.service;
 
-import com.tradeservice.entity.Product;
-import com.tradeservice.repository.product.ProductRepository;
+import com.tradeservice.entity.Order;
+import com.tradeservice.repository.order.OrderRepository;
+import com.tradeservice.service.impl.OrderServiceImpl;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+
+import static org.mockito.Mockito.*;
 
 import java.util.List;
-import java.util.stream.LongStream;
+import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
+import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
+@RunWith(MockitoJUnitRunner.class)
 public class OrderServiceTest {
 
-    @Autowired private ProductRepository     productRepository;
+    OrderService    orderService;
+    OrderRepository orderRepository;
 
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void before(){
-        productRepository.deleteAll();
+    @Before
+    public void setUp() {
+        orderRepository = mock(OrderRepository.class);
+        orderService    = new OrderServiceImpl(orderRepository);
     }
 
     @Test
-    public void testSave() throws Exception {
-        Product newProduct1 = new Product("Товар #12315", 59.0);
-        productRepository.save(newProduct1);
-        Assert.assertNotNull(productRepository.findAll().stream().filter(p->p.equals(newProduct1)).findAny().orElse(null));
+    public void testAdd() {
+     //   orderService.add(ORDER_1);
+//        verify(orderRepository, Mockito.times(1)).save(ORDER_1);
+//        given(orderRepository.findById(ORDER_1.getOrderId())).willReturn(Optional.of(ORDER_1));
+//        Assert.assertEquals(ORDER_1, orderService.getById(ORDER_1.getOrderId()).get());
     }
 
     @Test
-    public void testFindByIds() throws Exception {
-        List<Product> productsToSave = LongStream.iterate(1, i -> ++i).limit(50)
-                .mapToObj(i -> new Product(i+"Товар #12315" + i, 59.0 + i))
-                .collect(toList());
-        productRepository.saveAll(productsToSave);
+    public void testUpdate() {
+//        given(orderRepository.findById(ORDER_1.getOrderId())).willReturn(Optional.of(ORDER_1));
+//        orderService.update(ORDER_1, ORDER_1.getOrderId());
+//        verify(orderRepository, Mockito.times(1)).save(ORDER_1);
+    }
 
-        List<Product> productsFound = productRepository.findAllById(productsToSave.stream().map(Product::getProductId).collect(toList()));
-        Assert.assertEquals(productsFound,productsToSave);
+    @Test
+    public void testDelete() {
+//        given(orderRepository.findById(ORDER_1.getOrderId())).willReturn(Optional.of(ORDER_1));
+//        orderService.delete(ORDER_1.getOrderId());
+//        verify(orderRepository, Mockito.times(1)).delete(ORDER_1);
+    }
+
+    @Test
+    public void testGetAll() {
+//        given(orderRepository.findAll()).willReturn(ORDER_LIST);
+//        Assert.assertTrue(orderService.getAll().containsAll(ORDER_LIST));
+    }
+
+    @Test
+    public void testGetById() {
+//        given(orderRepository.findById(ORDER_1.getOrderId())).willReturn(Optional.of(ORDER_1));
+//        Assert.assertEquals(ORDER_1, orderService.getById(ORDER_1.getOrderId()).get());
     }
 
 
 
 
-
-    //    @Autowired private WebApplicationContext webApplicationContext;
-
-//    @Before
-//    public void before(){
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-//    }
-
-
-//        // request get
-//        mockMvc.perform(
-//                get("/user/login")
-//                        .param("email", email)
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect(jsonPath("$.message").value("user exist"));
-
-    //    @Test
-//    public void test_user_not_exist() throws Exception {
-//        // parameter
-//        String email = "test@test.com";
-//
-//        // request get
-//        mockMvc.perform(
-//                get("/user/login")
-//                        .param("email", email)
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//                .andDo(print())
-//                .andExpect(status().is5xxServerError())
-//                .andExpect(jsonPath("$.message").value("user is not exist"));
-//    }
 
 }

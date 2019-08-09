@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import static com.tradeservice.util.TestConstants.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -20,24 +21,20 @@ import static org.mockito.BDDMockito.given;
 @RunWith(MockitoJUnitRunner.class)
 public class ProductServiceTest {
 
-    private static final Product PRODUCT_1 = new Product(1L, "Товар #12311", 51.0);
-    private static final Product PRODUCT_2 = new Product(2L, "Товар #12312", 52.0);
-    private static final Product PRODUCT_3 = new Product(3L, "Товар #12313", 53.0);
-    private static final List<Product> PRODUCT_LIST = List.of(PRODUCT_1, PRODUCT_2, PRODUCT_3);
-
-    ProductService productService;
+    ProductService    productService;
     ProductRepository productRepository;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         productRepository = mock(ProductRepository.class);
         productService = new ProductServiceImpl(productRepository);
     }
 
     @Test
     public void testGetAll() {
-        given(productRepository.findAll()).willReturn(PRODUCT_LIST);
-        Assert.assertTrue(productService.getAll().containsAll(PRODUCT_LIST));
+        List<Product> productsList = getProductsList();
+        given(productRepository.findAll()).willReturn(productsList);
+        Assert.assertTrue(productService.getAll().containsAll(productsList));
     }
 
     @Test

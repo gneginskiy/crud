@@ -4,7 +4,9 @@ import com.tradeservice.entity.Order;
 import com.tradeservice.entity.OrderItem;
 import com.tradeservice.entity.Product;
 import com.tradeservice.repository.product.ProductRepository;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
@@ -16,6 +18,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import static com.tradeservice.util.TestConstants.*;
+
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureMockMvc
@@ -25,22 +29,25 @@ public class OrderRepositoryTest {
     @Autowired private OrderRepository   orderRepository;
     @Autowired private ProductRepository productRepository;
 
-    @BeforeEach
+    @Before
     public void before() {
+        populateOrderAndItsProducts();
+    }
+
+    @After
+    public void tearDown(){
         productRepository.deleteAll();
         orderRepository.deleteAll();
     }
 
     @Test
     public void testSave() throws Exception {
-        populateOrderAndItsProducts();
         orderRepository.findAll();
         Assert.assertEquals(orderRepository.findAll().get(0).getClientName(), CLIENT_NAME);
     }
 
     @Test
     public void testRemove() throws Exception {
-        populateOrderAndItsProducts();
         Order order = orderRepository.findAll().get(0);
         orderRepository.delete(order);
         Assert.assertEquals(0, orderRepository.findAll().size());
@@ -48,7 +55,6 @@ public class OrderRepositoryTest {
 
     @Test
     public void testUpdate() throws Exception {
-        populateOrderAndItsProducts();
         Order order = orderRepository.findAll().get(0);
         String expectedClientName = "Google Inc.";
         order.setClientName(expectedClientName);
@@ -58,13 +64,10 @@ public class OrderRepositoryTest {
 
 
     private void populateOrderAndItsProducts() {
-        Order newOrder1 = new Order(CLIENT_NAME, LocalDateTime.now(),"Los Angeles, California 90002");
-        Product product1 = productRepository.save(new Product("Товар #12315", 15.));
-        Product product2 = productRepository.save(new Product("Товар #12316", 16.));
-        newOrder1.setOrderItems(Set.of(
-                new OrderItem(product1,115),
-                new OrderItem(product2,116))
-        );
+        Product product1 = productRepository.save(PRODUCT_1.copy());
+        Product product2 = productRepository.save(PRODUCT_2.copy());
+        Set<OrderItem> orderItems = Set.of(new OrderItem(product1, 115), new OrderItem(product2, 116));
+        Order newOrder1 = new Order(CLIENT_NAME, LocalDateTime.now(),"Los Angeles, California 90002", orderItems);
         orderRepository.saveAndRefresh(newOrder1);
     }
 
