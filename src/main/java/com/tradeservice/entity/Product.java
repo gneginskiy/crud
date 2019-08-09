@@ -40,6 +40,6 @@ public class Product {
   private Double price;
 
   public Product copy(){
-    return new Product(name,price);
+    return new Product(productId, name, price);
   }
 }

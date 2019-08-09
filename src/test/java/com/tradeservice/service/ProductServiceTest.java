@@ -1,6 +1,5 @@
 package com.tradeservice.service;
 
-import com.tradeservice.entity.Product;
 import com.tradeservice.repository.product.ProductRepository;
 import com.tradeservice.service.impl.ProductServiceImpl;
 import org.junit.Assert;
@@ -10,10 +9,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.tradeservice.util.TestConstants.*;
+import static com.tradeservice.util.TestUtils.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.BDDMockito.given;
@@ -32,9 +30,8 @@ public class ProductServiceTest {
 
     @Test
     public void testGetAll() {
-        List<Product> productsList = getProductsList();
-        given(productRepository.findAll()).willReturn(productsList);
-        Assert.assertTrue(productService.getAll().containsAll(productsList));
+        given(productRepository.findAll()).willReturn(PRODUCT_LIST);
+        Assert.assertTrue(productService.getAll().containsAll(PRODUCT_LIST));
     }
 
     @Test

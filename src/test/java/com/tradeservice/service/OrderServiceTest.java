@@ -11,8 +11,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import static com.tradeservice.util.TestConstants.PRODUCT_1;
-import static com.tradeservice.util.TestConstants.PRODUCT_2;
+import static com.tradeservice.util.TestUtils.PRODUCT_1;
+import static com.tradeservice.util.TestUtils.PRODUCT_2;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
