@@ -30,8 +30,7 @@ public class ProductRepositoryTest {
 
     @Test
     public void testSave() throws Exception {
-        Product newProduct1 = new Product("Товар #12315", 59.0);
-        productRepository.save(newProduct1);
+        Product newProduct1 = populateProduct();
         Assert.assertNotNull(productRepository.findAll().stream().filter(p -> p.equals(newProduct1)).findAny().orElse(null));
     }
 
@@ -48,16 +47,20 @@ public class ProductRepositoryTest {
 
     @Test
     public void testDelete() throws Exception {
-        Product newProduct1 = new Product("Товар #12315", 59.0);
-        productRepository.save(newProduct1);
+        Product newProduct1 = populateProduct();
         productRepository.delete(newProduct1);
         Assert.assertEquals(0, productRepository.findAll().size());
     }
 
-    @Test
-    public void testUpdate() throws Exception {
+    private Product populateProduct() {
         Product newProduct1 = new Product("Товар #12315", 59.0);
         productRepository.save(newProduct1);
+        return newProduct1;
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+        Product newProduct1 = populateProduct();
         String newName = "Новое имя!";
         newProduct1.setName(newName);
         productRepository.save(newProduct1);

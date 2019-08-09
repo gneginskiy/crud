@@ -2,87 +2,63 @@ package com.tradeservice.service;
 
 import com.tradeservice.entity.Product;
 import com.tradeservice.repository.product.ProductRepository;
+import com.tradeservice.service.impl.ProductServiceImpl;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
-import java.util.stream.LongStream;
+import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
+import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-public class ProductServiceTest {
+@RunWith(MockitoJUnitRunner.class)
+public class ProductServiceTest{
 
-    @Autowired private ProductRepository     productRepository;
+    private  static final Product       PRODUCT_1    = new Product(1L, "Товар #12311", 51.0);
+    private  static final Product       PRODUCT_2    = new Product(2L, "Товар #12312", 52.0);
+    private  static final Product       PRODUCT_3    = new Product(3L, "Товар #12313", 53.0);
+    private  static final List<Product> PRODUCT_LIST = List.of(PRODUCT_1,PRODUCT_2,PRODUCT_3);
 
-    private MockMvc mockMvc;
+    ProductService    productService;
+    ProductRepository productRepository;
 
-    @BeforeEach
-    public void before(){
-        productRepository.deleteAll();
+    @Before
+    public void setUp() throws Exception {
+        productRepository = mock(ProductRepository.class);
+        productService    = new ProductServiceImpl(productRepository);
     }
 
     @Test
-    public void testSave() throws Exception {
-        Product newProduct1 = new Product("Товар #12315", 59.0);
-        productRepository.save(newProduct1);
-        Assert.assertNotNull(productRepository.findAll().stream().filter(p->p.equals(newProduct1)).findAny().orElse(null));
+    public void testGetAll() {
+        given(productRepository.findAll()).willReturn(PRODUCT_LIST);
+        Assert.assertTrue(productService.getAll().containsAll(PRODUCT_LIST));
     }
 
     @Test
-    public void testFindByIds() throws Exception {
-        List<Product> productsToSave = LongStream.iterate(1, i -> ++i).limit(50)
-                .mapToObj(i -> new Product(i+"Товар #12315" + i, 59.0 + i))
-                .collect(toList());
-        productRepository.saveAll(productsToSave);
-
-        List<Product> productsFound = productRepository.findAllById(productsToSave.stream().map(Product::getProductId).collect(toList()));
-        Assert.assertEquals(productsFound,productsToSave);
+    public void testGetById() {
+        given(productRepository.findById(1L)).willReturn(Optional.of(PRODUCT_1));
+        Assert.assertEquals(PRODUCT_1, productService.getById(1L).get());
     }
 
+    @Test
+    public void testDelete() {
+        given(productRepository.findById(PRODUCT_1.getProductId())).willReturn(Optional.of(PRODUCT_1));
+        productService.delete(1L);
+        verify(productRepository, Mockito.times(1)).delete(PRODUCT_1);
+    }
 
+    @Test
+    public void testAdd() {
 
+    }
 
+    @Test
+    public void testUpdate() {
 
-    //    @Autowired private WebApplicationContext webApplicationContext;
-
-//    @Before
-//    public void before(){
-//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-//    }
-
-
-//        // request get
-//        mockMvc.perform(
-//                get("/user/login")
-//                        .param("email", email)
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//                .andDo(print())
-//                .andExpect(status().is2xxSuccessful())
-//                .andExpect(jsonPath("$.message").value("user exist"));
-
-    //    @Test
-//    public void test_user_not_exist() throws Exception {
-//        // parameter
-//        String email = "test@test.com";
-//
-//        // request get
-//        mockMvc.perform(
-//                get("/user/login")
-//                        .param("email", email)
-//                        .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-//                .andDo(print())
-//                .andExpect(status().is5xxServerError())
-//                .andExpect(jsonPath("$.message").value("user is not exist"));
-//    }
-
+    }
 }
