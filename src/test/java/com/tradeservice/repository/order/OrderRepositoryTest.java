@@ -47,8 +47,9 @@ public class OrderRepositoryTest {
     @Test
     public void testRemove()  {
         Order order = orderRepository.findAll().get(0);
+        Assert.assertEquals(2, orderRepository.findAll().size());
         orderRepository.delete(order);
-        Assert.assertEquals(0, orderRepository.findAll().size());
+        Assert.assertEquals(1, orderRepository.findAll().size());
     }
 
     @Test

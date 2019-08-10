@@ -50,7 +50,7 @@ public class OrderServiceTest {
         Order orderToUpdate = getPopulatedOrder();
         given(orderRepository.findById(orderToUpdate.getOrderId())).willReturn(Optional.of(orderToUpdate));
         orderService.update(orderToUpdate, orderToUpdate.getOrderId());
-        verify(orderRepository, Mockito.times(1)).saveAndRefresh(orderToUpdate);
+        verify(orderRepository, Mockito.times(1)).saveAndFlush(orderToUpdate);
     }
 
     @Test
