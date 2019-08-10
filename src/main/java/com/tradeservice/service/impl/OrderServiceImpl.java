@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
   public Order update(Order newOrderRequest, Long id) {
     orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
     newOrderRequest.setOrderId(id);
-    return orderRepository.saveAndRefresh(newOrderRequest);
+    return orderRepository.saveAndFlush(newOrderRequest);
   }
 
   @Override

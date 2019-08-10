@@ -3,6 +3,7 @@ package com.tradeservice.repository.order.impl;
 import com.tradeservice.entity.Order;
 import com.tradeservice.repository.order.OrderRepositoryBasic;
 import com.tradeservice.repository.order.OrderRepositoryCustom;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -16,7 +17,9 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     }
 
     @Override
+    @Transactional
     public Order saveAndRefresh(Order order) {
+        entityManager.merge(order);
         orderRepositoryBasic.save(order);
         entityManager.refresh(order);
         return order;
