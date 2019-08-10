@@ -19,7 +19,6 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
     @Override
     @Transactional
     public Order saveAndRefresh(Order order) {
-        entityManager.merge(order);
         orderRepositoryBasic.save(order);
         entityManager.refresh(order);
         return order;
